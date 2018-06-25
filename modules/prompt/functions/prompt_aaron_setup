@@ -1,0 +1,102 @@
+#
+# Aaron's prompt.
+#
+# Authors:
+#   Aaron C. Meadows <shdwjk@gmail.com>
+#
+# Features:
+#   - Simple VCS branch, staged, and unstaged indication.
+#   - Number of pushed directories
+#   - Number of suspended jobs
+#   - Date / Time
+#   - Last command exit status of :) or :( and error code
+#
+# Baseed on Giddie Them
+#
+
+
+function +vi-git_precmd {
+  # Check for untracked files, since vcs_info does not.
+  if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
+    hook_com[unstaged]+='%F{red}*%f'
+  fi
+}
+
+function prompt_aaron_dirs_count() {
+	DirsCount=`dirs -p | wc -l`
+	DirsCount=$(( DirsCount - 1 ))
+	if [[ ${DirsCount} -ne 0 ]] ; then
+		echo "%B%F{blue}[%F{cyan}D:${DirsCount}%F{blue}]%b%f"
+	else
+		echo ""
+	fi
+}
+
+function prompt_aaron_jobs_count() {
+	JobsCount=`jobs | grep "^\[" | wc -l`
+	if [[ ${JobsCount} -ne 0 ]] ; then
+		echo "%B%F{blue}[%F{red}J:${JobsCount}%F{blue}]%b%f"
+	else
+		echo ""
+	fi
+}
+
+
+function prompt_aaron_precmd {
+  # Replace '/home/<user>' with '~'.
+  _prompt_aaron_pwd="${PWD/#$HOME/~}"
+  _prompt_aaron_dirs="$(prompt_aaron_dirs_count)"
+  _prompt_aaron_jobs="$(prompt_aaron_jobs_count)"
+
+  vcs_info
+}
+
+
+
+
+
+function prompt_aaron_setup {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent sp subst)
+
+  # Load required functions.
+  autoload -Uz vcs_info
+  autoload -Uz add-zsh-hook
+
+  # Add hook to set up prompt parameters before each command.
+  add-zsh-hook precmd prompt_aaron_precmd
+
+  # Set editor-info parameters.
+  zstyle ':prezto:module:editor:info:completing' format '%F{green}...%f'
+  zstyle ':prezto:module:editor:info:keymap:alternate' format '%F{yellow}--- COMMAND ---%f'
+
+  # Set vcs_info parameters.
+  zstyle ':vcs_info:*' enable git
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' check-for-staged-changes true
+  zstyle ':vcs_info:*' formats '%B%F{green}%s:%F{yellow}%b%f%c%u'
+  zstyle ':vcs_info:*' actionformats '%B%F{green}%s:%F{yellow}%b%F{cyan} (%a:%F{magenta}%m%F{cyan})%f%c%u'
+  zstyle ':vcs_info:*' stagedstr '%F{red}@%f'
+  zstyle ':vcs_info:*' unstagedstr '%F{red}#%f'
+
+  # Set vcs_info hooks.
+  # NOTE: Prior to Zsh v4.3.12, there are no static hooks, no vcs_info_hookadd
+  #       function, and no 'no-vcs' hook.
+  zstyle ':vcs_info:git*+set-message:*' hooks git_precmd
+
+  # Define prompts.
+#  PROMPT='%(?..%F{red}%B-> [%?]%b%f
+# )%F{magenta}%n%f@%F{yellow}%m%f|%F{green}${_prompt_aaron_pwd}%f${vcs_info_msg_0_}
+# %F{blue}${_prompt_aaron_symbol}%f '
+
+PROMPT='%F{blue}%B┌─[%F{green}%n%F{black}@%b%F{cyan}%m%B%F{blue}]%b%f - %b%F{blue}%B[%F{white}%~%F{blue}]%b%f - %F{blue}%B[%b%F{yellow}'%D{"%a %b %d, %I:%M"}%b$'%F{blue}%B]%b%f
+%F{blue}%B└─%B[%(?.%F{green}:%).%F{red}:( %F{yellow}<%?>)%F{blue}%B]${_prompt_aaron_dirs}${_prompt_aaron_jobs} %F{blue}%B<${vcs_info_msg_0_}%F{blue}%B>%f%b '
+PS2=$' %F{blue}%B>%f%b '
+
+
+  RPROMPT='${editor_info[keymap]}'
+  SPROMPT='zsh: correct %F{magenta}%R%f to %F{green}%r%f [nyae]? '
+}
+
+prompt_aaron_setup "$@"
