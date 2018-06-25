@@ -12,13 +12,15 @@ fi
 
 # Customize to your needs...
 
-# fix max open files
-ulimit -n 524288 524288
+if [[ "$OSTYPE" == darwin* ]]; then
+	# fix max open files
+	ulimit -n 524288 524288
 
-# fix run-help for homebrew zsh location?
-unalias run-help
-autoload run-help
-HELPDIR=/usr/local/share/zsh/help
+	# fix run-help for homebrew zsh location?
+	unalias run-help
+	autoload run-help
+	HELPDIR=/usr/local/share/zsh/help
+fi
 
 # auto push is dumb
 setopt noautopushd
@@ -27,7 +29,9 @@ eval `dircolors $HOME/.dircolors`
 
 HOMEBREW_GITHUB_API_TOKEN=0ffa5246afe20e913e094dde0fcc0a154a40e30f
 
-source "${HOME}/.zsh/bindkeys.zsh"
+if [[ -a "${HOME}/.zsh/bindkeys.zsh" ]]; then
+	source "${HOME}/.zsh/bindkeys.zsh"
+fi
 source "${HOME}/.zsh/aliases.zsh"
 source "${HOME}/.zsh/dev.zsh"
 # source "${HOME}/.zsh/rubix.zsh"

@@ -36,8 +36,10 @@ fi
 # Ensure path arrays do not contain duplicates.
 typeset -gU cdpath fpath mailpath path
 
-# Add homebrew to the completion path
-fpath=("/usr/local/bin/" $fpath)
+if [[ "$OSTYPE" == darwin* ]]; then
+	# Add homebrew to the completion path
+	fpath=("/usr/local/bin/" $fpath)
+fi
 
 # Set the list of directories that cd searches.
 # cdpath=(
@@ -45,15 +47,27 @@ fpath=("/usr/local/bin/" $fpath)
 # )
 
 # Set the list of directories that Zsh searches for programs.
-path=(
-  ~/{binsh,bin}
-  ~/.composer/vendor/bin
-  /usr/local/opt/coreutils/libexec/gnubin
-  $(brew --prefix coreutils)/libexec/gnubin
-  /usr/local/share/python
-  /usr/local/{bin,sbin}
-  $path
-)
+
+if [[ "$OSTYPE" == darwin* ]]; then
+	path=(
+			~/{binsh,bin}
+			~/.composer/vendor/bin
+			/usr/local/opt/coreutils/libexec/gnubin
+			$(brew --prefix coreutils)/libexec/gnubin
+			/usr/local/share/python
+			/usr/local/{bin,sbin}
+			$path
+		 )
+else
+	path=(
+			~/{binsh,bin}
+			~/.composer/vendor/bin
+			/usr/local/opt/coreutils/libexec/gnubin
+			/usr/local/share/python
+			/usr/local/{bin,sbin}
+			$path
+		 )
+fi
 
 #
 # Less
