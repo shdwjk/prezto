@@ -18,7 +18,7 @@
 function +vi-git_precmd {
   # Check for untracked files, since vcs_info does not.
   if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
-    hook_com[unstaged]+='%F{red}*%f'
+    hook_com[unstaged]='%F{red}?%f'$hook_com[unstaged]
   fi
 }
 
@@ -75,10 +75,10 @@ function prompt_aaron_setup {
   zstyle ':vcs_info:*' enable git
   zstyle ':vcs_info:*' check-for-changes true
   zstyle ':vcs_info:*' check-for-staged-changes true
-  zstyle ':vcs_info:*' formats '%B%F{green}%s:%F{yellow}%b%f%c%u'
-  zstyle ':vcs_info:*' actionformats '%B%F{green}%s:%F{yellow}%b%F{cyan} (%a:%F{magenta}%m%F{cyan})%f%c%u'
-  zstyle ':vcs_info:*' stagedstr '%F{red}@%f'
-  zstyle ':vcs_info:*' unstagedstr '%F{red}#%f'
+  zstyle ':vcs_info:*' formats '%B%F{green}%s:%F{yellow}%b%F{green}:%%f%%b%f%u%c'
+  zstyle ':vcs_info:*' actionformats '%B%F{green}%s:%F{yellow}%b%F{cyan} (%a:%F{magenta}%m%F{cyan})%F{green}:%%f%%b%f%u%c'
+  zstyle ':vcs_info:*' stagedstr '%F{green}A%f'
+  zstyle ':vcs_info:*' unstagedstr '%F{red}M%f'
 
   # Set vcs_info hooks.
   # NOTE: Prior to Zsh v4.3.12, there are no static hooks, no vcs_info_hookadd
