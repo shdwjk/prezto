@@ -25,18 +25,27 @@ fi
 # auto push is dumb
 setopt noautopushd
 
-eval `dircolors $HOME/.dircolors`
+
+if [[ -a "${HOME}/.dircolors" ]]; then
+	eval `dircolors $HOME/.dircolors`
+fi
 
 HOMEBREW_GITHUB_API_TOKEN=0ffa5246afe20e913e094dde0fcc0a154a40e30f
 
 if [[ -a "${HOME}/.zsh/bindkeys.zsh" ]]; then
 	source "${HOME}/.zsh/bindkeys.zsh"
 fi
-source "${HOME}/.zsh/aliases.zsh"
-source "${HOME}/.zsh/dev.zsh"
-# source "${HOME}/.zsh/rubix.zsh"
-source "${HOME}/.zsh/there.zsh"
+if [[ -a "${HOME}/.zsh/aliases.zsh" ]]; then
+	source "${HOME}/.zsh/aliases.zsh"
+fi
+if [[ -a "${HOME}/.zsh/dev.zsh" ]]; then
+	source "${HOME}/.zsh/dev.zsh"
+fi
+if [[ -a "${HOME}/.zsh/there.zsh" ]]; then
+	source "${HOME}/.zsh/there.zsh"
+fi
 
+# source "${HOME}/.zsh/rubix.zsh"
 # source "${HOME}/.zsh/iterm2.zsh"
 
 
