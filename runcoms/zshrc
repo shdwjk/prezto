@@ -55,7 +55,7 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
 zstyle ':completion:*' list-suffixes true
 zstyle ':completion:*' match-original both
-zstyle ':completion:*' matcher-list ''
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
 zstyle ':completion:*' max-errors 2
 zstyle ':completion:*' menu select=1
 zstyle ':completion:*' original false
