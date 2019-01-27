@@ -81,4 +81,6 @@ HISTSIZE=1000
 SAVEHIST=100000
 setopt appendhistory autocd
 bindkey -e
+
+ssh-add &>/dev/null
 # End of lines configured by zsh-newuser-install
