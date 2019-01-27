@@ -41,12 +41,19 @@ function prompt_aaron_jobs_count() {
 	fi
 }
 
+function prompt_aaron_iterm2_status() {
+  if [[ -a ~/.iterm2/it2setkeylabel ]] ; then
+    ~/.iterm2/it2setkeylabel set status "$(test -d .git && (git rev-parse --abbrev-ref HEAD) || (echo -n "Not a repo"))"
+  fi
+}
 
 function prompt_aaron_precmd {
   # Replace '/home/<user>' with '~'.
   _prompt_aaron_pwd="${PWD/#$HOME/~}"
   _prompt_aaron_dirs="$(prompt_aaron_dirs_count)"
   _prompt_aaron_jobs="$(prompt_aaron_jobs_count)"
+  prompt_aaron_iterm2_status
+
 
   vcs_info
 }
