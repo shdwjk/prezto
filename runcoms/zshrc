@@ -17,7 +17,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
 	ulimit -n 524288 524288
 
 	# fix run-help for homebrew zsh location?
-	unalias run-help
+	unalias run-help 2>/dev/null
 	autoload run-help
 	HELPDIR=/usr/local/share/zsh/help
 fi
@@ -34,6 +34,8 @@ HOMEBREW_GITHUB_API_TOKEN=0ffa5246afe20e913e094dde0fcc0a154a40e30f
 
 if [[ -a "${HOME}/.zsh/bindkeys.zsh" ]]; then
 	source "${HOME}/.zsh/bindkeys.zsh"
+else
+  echo "DIDN'T FIND bindkeys.zsh"
 fi
 if [[ -a "${HOME}/.zsh/aliases.zsh" ]]; then
 	source "${HOME}/.zsh/aliases.zsh"
@@ -43,6 +45,9 @@ if [[ -a "${HOME}/.zsh/dev.zsh" ]]; then
 fi
 if [[ -a "${HOME}/.zsh/there.zsh" ]]; then
 	source "${HOME}/.zsh/there.zsh"
+fi
+if [[ -a "${HOME}/.zsh/zsh.zsh" ]]; then
+	source "${HOME}/.zsh/zsh.zsh"
 fi
 
 # source "${HOME}/.zsh/rubix.zsh"
@@ -70,7 +75,7 @@ zstyle ':completion:*' menu select=1
 zstyle ':completion:*' original false
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 zstyle ':completion:*' verbose true
-zstyle :compinstall filename '/Users/aaron.meadows/.zshrc'
+zstyle :compinstall filename "$HOME/.zshrc"
 
 autoload -Uz compinit
 compinit
